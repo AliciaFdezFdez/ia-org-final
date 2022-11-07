@@ -15,11 +15,11 @@ ancho = 7
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 
-coor_list = []
+coord_list = []
 for i in range(50):
-        x = random.randint(0,520)
-        y = random.randint(0,540)
-        coor_list.append([x, y])
+    x = random.randint(0, 520)
+    y = random.randint(0, 540)
+    coord_list.append([x, y])
 
 while True:
     for event in pygame.event.get():
@@ -27,7 +27,7 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
     screen.fill(GREEN)
-    for z in coor_list:
+    for z in coord_list:
         pygame.draw.circle(screen, WHITE, z, 2)
         z[1] += 1
         if z[1] > 540:
@@ -41,14 +41,14 @@ while True:
                 pass
 
             else:
-               if i % 2 != 0:
+                if i % 2 != 0:
                     pygame.draw.polygon(screen, YELLOW, [(110 + i * 44, 110 + j * 48), (134 + i * 44, 110 + j * 48),
                                                          (146 + i * 44, 130 + j * 48), (134 + i * 44, 150 + j * 48),
                                                          (110 + i * 44, 150 + j * 48), (98 + i * 44, 130 + j * 48)])
-               if i % 2 == 0:
-                   pygame.draw.polygon(screen, YELLOW, [(110 + i * 44, 134 + j * 48), (134 + i * 44, 134 + j * 48),
-                                                        (146 + i * 44, 154 + j * 48), (134 + i * 44, 174 + j * 48),
-                                                        (110 + i * 44, 174 + j * 48), (98 + i * 44, 154 + j * 48)])
+                if i % 2 == 0:
+                    pygame.draw.polygon(screen, YELLOW, [(110 + i * 44, 134 + j * 48), (134 + i * 44, 134 + j * 48),
+                                                         (146 + i * 44, 154 + j * 48), (134 + i * 44, 174 + j * 48),
+                                                         (110 + i * 44, 174 + j * 48), (98 + i * 44, 154 + j * 48)])
 
     pygame.display.flip()
     clock.tick(30)
