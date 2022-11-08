@@ -46,7 +46,7 @@ click = False
 def main_menu():
     while True:
         screen.fill(GREEN)
-        draw_text('Menú de inicio', font, BLACK, screen, 180, 50)
+        draw_text('Menú de inicio', font, BLACK, screen, 190, 50)
 
         mx, my = pygame.mouse.get_pos()
 
@@ -59,7 +59,9 @@ def main_menu():
             if click:
                 options()
         pygame.draw.rect(screen, YELLOW, boton1)
+        draw_text('Jugar', font, BLACK, screen, 230, 215)
         pygame.draw.rect(screen, YELLOW, boton2)
+        draw_text('Créditos', font, BLACK, screen, 220, 315)
 
         click = False
         for event in pygame.event.get():
@@ -74,6 +76,10 @@ def main_menu():
 
 def game():
     running = True
+    bee1 = pygame.image.load("sprites/bee.png")
+    bee1 = pygame.image.load("sprites/bee.png")
+    bee1 = pygame.image.load("sprites/bee.png")
+
     while running:
         for event in pygame.event.get():
             print(event)
@@ -121,6 +127,13 @@ def options():
                 if event.key == pygame.K_ESCAPE:
                     running = False
         screen.fill(GREEN)
+
+        draw_text('Alumnos:', font, BLACK, screen, 210, 50)
+        draw_text('Alicia Fernández Fernández', font, BLACK, screen, 120, 160)
+        draw_text('Esteban Sánchez González', font, BLACK, screen, 125, 200)
+        draw_text('Javier Chico García', font, BLACK, screen, 150, 240)
+        draw_text('Jorge De la Cruz Luiña', font, BLACK, screen, 140, 280)
+
         pygame.display.flip()
         clock.tick(30)
 
