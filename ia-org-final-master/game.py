@@ -84,7 +84,12 @@ def game():
 
     game = GameLogic(screen,coord_list)
 
+    
     while running:
+        if game.winner() != None:
+            print(game.winner())
+            running = False
+
         for event in pygame.event.get():
             # print(event)
             if event.type == pygame.QUIT:
@@ -95,8 +100,7 @@ def game():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 row, col = get_row_col_from_mouse(pos)
-                # bee = board.get_piece(row, col)
-                # board.move(bee, 3, 3)
+                game.select(row, col)
 
         game.update()
         pygame.display.flip()
@@ -107,7 +111,7 @@ def options():
     running = True
     while running:
         for event in pygame.event.get():
-            print(event)
+            # print(event)
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:

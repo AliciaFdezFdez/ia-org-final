@@ -1,5 +1,5 @@
 import pygame
-from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, BLACK, WIDTH, HEIGHT, size, YELLOW
+from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, BLACK, GREEN2, WIDTH, HEIGHT, size, YELLOW, tipos
 from .bee import Bee
     
 class Board:
@@ -57,25 +57,25 @@ class Board:
                 if col in ROWS[row]:
                     if counterP1 > 0:
                         if counterP1 > 4:
-                            bee = Bee(row, col, BLACK)
+                            bee = Bee(row, col, GREEN2, "P1")
                             self.board[col].append(bee)
                         elif counterP1 > 2 and counterP1 <= 4:
-                            bee = Bee(row, col, RED)
+                            bee = Bee(row, col, RED, "P1")
                             self.board[col].append(bee)
                         elif counterP1 > 0 and counterP1 <= 2:
-                            bee = Bee(row, col, BLUE)
+                            bee = Bee(row, col, BLUE, "P1")
                             self.board[col].append(bee)
                         counterP1 -= 1
                         cellsLeft -= 1
                     elif counterP2 > 0 and cellsLeft <= 6:
                         if counterP2 > 4:
-                            bee = Bee(row, col, BLUE)
+                            bee = Bee(row, col, BLUE, "P2")
                             self.board[col].append(bee)
                         elif counterP2 > 2 and counterP2 <= 4:
-                            bee = Bee(row, col, RED)
+                            bee = Bee(row, col, RED, "P2")
                             self.board[col].append(bee)
                         elif counterP2 > 0 and counterP2 <= 2:
-                            bee = Bee(row, col, BLACK)
+                            bee = Bee(row, col, GREEN2, "P2")
                             self.board[col].append(bee)
                         counterP2 -= 1
                         cellsLeft -= 1
@@ -92,7 +92,40 @@ class Board:
             for row in range(0, len(ROWS)):
                 if col in ROWS[row]:
                     bee = self.board[col][row]
-                    if bee != 0 and type(bee)!=str:
+                    if bee != 0:
                         bee.draw(screen)
                         
-                
+    def get_valid_moves(self, bee):
+        moves = {}
+        posBee = (bee.row, bee.col)
+        for futureCol in range (0, COLS):
+            for futureRow in range (0, len(ROWS)):
+                if self._distancia(posBee, (futureRow, futureCol)) == 1 and self.board[futureCol][futureRow]==0:
+                    moves[(futureRow, futureCol)]=[]
+                elif self._distancia(posBee, (futureRow, futureCol)) == 1 and type(self.board[futureCol][futureRow])!=int:
+                    otherBee = self.board[futureCol][futureRow]
+                    if otherBee.owner != bee.owner:
+                        weakness = tipos[bee.color]
+                        if otherBee.color == weakness:
+                            moves[(futureRow, futureCol)] = [otherBee]
+        return moves
+    
+    def _distancia(self, a, b):
+        return max(abs(a[0]-b[0]), abs(a[1]-b[1]))
+    
+    def remove(self, pieces):
+        for piece in pieces:
+            self.board[piece.col][piece.row] = 0
+            if piece != 0:
+                if piece.owner == "P1":
+                    self.player1bees -= 1
+                else:
+                    self.player2bees -= 1
+    
+    def winner(self):
+        if self.player1bees <= 0:
+            return "Gana el jugador 2"
+        elif self.player2bees <= 0:
+            return "Gana el jugador 1"
+        
+        return None 

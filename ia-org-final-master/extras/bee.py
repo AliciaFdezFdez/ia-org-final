@@ -1,18 +1,22 @@
 import pygame
-from .constants import PosicionPA, distanciaHex
+from .constants import PosicionPA, distanciaHex, WHITE2, BLACK
 
 class Bee:
+    PADDING = 4
+    OUTLINE = 3
 
-    def __init__(self, row, col, color):
+    def __init__(self, row, col, color, owner):
         self.col = col
         self.row = row
         self.color = color
         self.PosicionPA = PosicionPA
         self.distanciaHex = distanciaHex
+        self.owner = owner
+
         self.x=0
         self.y=0
         self.calc_pos()
-        self.PADDING = 3
+
 
     def calc_pos(self):
         self.x = self.PosicionPA + 12 + self.col * self.distanciaHex
@@ -28,7 +32,12 @@ class Bee:
 
     def draw(self, screen):
         radius = 20 - self.PADDING
+        if self.owner=="P1":
+            pygame.draw.circle(screen, BLACK, (self.x, self.y), radius + self.OUTLINE)
+        else:
+            pygame.draw.circle(screen, WHITE2, (self.x, self.y), radius + self.OUTLINE)
         pygame.draw.circle(screen, self.color, (self.x, self.y), radius)
-    
+        
+        
     def __repr__(self):
         return str(self.color)
