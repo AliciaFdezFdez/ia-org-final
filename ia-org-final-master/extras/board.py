@@ -35,14 +35,17 @@ class Board:
                                                              (PosicionPA + col * distanciaHex, PosicionPA + 64 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex)])
     
     def move(self, bee, row, col):
-        if self.board[col][row]==0:
-            self.board[bee.row][bee.col],  self.board[row][col] = self.board[row][col], self.board[bee.row][bee.col]
+        if type(bee)!=int:
+            self.board[bee.col][bee.row],  self.board[col][row] = self.board[col][row], self.board[bee.col][bee.row]
             bee.move(row, col)
-            print (self.board[0][3])
+
 
 
     def get_piece(self, row, col):
-        return self.board[col][row]
+        if col in range(len(self.board)) and row in range(len(self.board[col])):
+            return self.board[col][row]
+        return 2
+
 
     def create_board(self):
         counterP1=self.player1bees
@@ -79,11 +82,15 @@ class Board:
                     else:
                         self.board[col].append(0)
                         cellsLeft -= 1
+                else:
+                    self.board[col].append(1)
 
+                
     def draw(self, screen, coord_list):
         self.draw_polygon(screen, coord_list)
-        for col in range(0, len(self.board)):
-            for row in range(0, len(self.board[col])):
+        for col in range(0, COLS):
+            for row in range(0, len(ROWS)):
+                if col in ROWS[row]:
                     bee = self.board[col][row]
                     if bee != 0 and type(bee)!=str:
                         bee.draw(screen)

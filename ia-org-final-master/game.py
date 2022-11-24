@@ -3,6 +3,7 @@ import pygame
 import sys
 from extras.constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, YELLOW, WHITE, BLACK, WIDTH, HEIGHT, size
 from extras.board import Board
+from extras.gameLogic import GameLogic
 
 pygame.init()
 
@@ -67,78 +68,12 @@ def get_row_col_from_mouse(pos):
     x, y = pos
     
     # Esto es para que al pulsar sepa que casilla es la que esta pulsando y actue en consecuencia
+    col=round((x-(PosicionPA + 12))/distanciaHex)
+    if col % 2 != 0:
+        row = round((y -(PosicionPA + 20))/ distanciaHex)
+    else:
+        row = round((y -(PosicionPA + 44))/ distanciaHex)
 
-    if y in range(177, 350) and x in range(110, 134):
-        col = 0
-        l=list(range(177, 350, 44))
-        for i in range(1, len(l)):
-            if y < l[i]:
-                row = i-1
-                break
-            else:
-                row = len(l)-1
-
-    if y in range(154, 370) and x in range(110+44*1, 134+44*1):
-        col = 1
-        l=list(range(154, 370, 44))
-        for i in range(1, len(l)):
-            if y < l[i]:
-                row = i-1
-                break
-            else:
-                row = len(l)-1
-    
-    if y in range(133, 394) and x in range(110+44*2, 134+44*2):
-        col = 2
-        l=list(range(133, 394, 44))
-        for i in range(1, len(l)):
-            if y < l[i]:
-                row = i-1
-                break
-            else:
-                row = len(l)-1
-    
-    if y in range(110, 414) and x in range(110+44*3, 134+44*3):
-        col = 3
-        l=list(range(154, 370, 44))
-        for i in range(1, len(l)):
-            if y < l[i]:
-                row = i-1
-                break
-            else:
-                row = len(l)-1
-
-    if y in range(133, 394) and x in range(110+44*4, 134+44*4):
-        col = 4
-        l=list(range(154, 370, 44))
-        for i in range(1, len(l)):
-            if y < l[i]:
-                row = i-1
-                break
-            else:
-                row = len(l)-1
-    
-    if y in range(154, 370) and x in range(110+44*5, 134+44*5):
-        col = 5
-        l=list(range(154, 370, 44))
-        for i in range(1, len(l)):
-            if y < l[i]:
-                row = i-1
-                break
-            else:
-                row = len(l)-1
-    
-    if y in range(177, 350) and x in range(110+44*6, 134+44*6):
-        col = 6
-        l=list(range(154, 370, 44))
-        for i in range(1, len(l)):
-            if y < l[i]:
-                row = i-1
-                break
-            else:
-                row = len(l)-1
-
-    print (row, col)
     return row, col
 
 def game():
@@ -147,6 +82,7 @@ def game():
     # bee1 = pygame.image.load("sprites/bee.png")
     # bee1 = pygame.image.load("sprites/bee.png")
 
+    game = GameLogic(screen,coord_list)
 
     while running:
         for event in pygame.event.get():
@@ -159,11 +95,10 @@ def game():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 row, col = get_row_col_from_mouse(pos)
-                bee = board.get_piece(row, col)
-                board.move(bee, 3, 3)
+                # bee = board.get_piece(row, col)
+                # board.move(bee, 3, 3)
 
-        board.draw(screen,coord_list)
-        pygame.display.update()
+        game.update()
         pygame.display.flip()
         clock.tick(30)
 
