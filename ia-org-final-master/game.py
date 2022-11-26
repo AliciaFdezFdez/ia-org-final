@@ -4,6 +4,7 @@ import sys
 from extras.constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, YELLOW, WHITE, BLACK, WIDTH, HEIGHT, size
 from extras.board import Board
 from extras.gameLogic import GameLogic
+from minimax.algorithm import minimax 
 
 pygame.init()
 
@@ -86,6 +87,14 @@ def game():
 
     
     while running:
+        if game.turn == "P2":
+            value, new_board = minimax(game.get_board(), 2, True, game, "P2", "P1")
+            game.ai_move(new_board)
+        
+        if game.turn == "P1":
+            value, new_board = minimax(game.get_board(), 2, True, game, "P1", "P2")
+            game.ai_move(new_board)
+
         if game.winner() != None:
             print(game.winner())
             running = False

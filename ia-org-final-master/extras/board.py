@@ -1,5 +1,5 @@
 import pygame
-from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, BLACK, GREEN2, WIDTH, HEIGHT, size, YELLOW, tipos
+from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, YE, GREEN2, HEIGHT, YELLOW, tipos
 from .bee import Bee
     
 class Board:
@@ -26,20 +26,29 @@ class Board:
             for row in range(0, len(ROWS)):
                 if col in ROWS[row]:
                     if col % 2 != 0:
-                        pygame.draw.polygon(screen, YELLOW, [(PosicionPA + col * distanciaHex, PosicionPA + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + row * distanciaHex),
+                        pygame.draw.polygon(screen, YE, [(PosicionPA + col * distanciaHex, PosicionPA + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + row * distanciaHex),
                                                              (PosicionPA + 36 + col * distanciaHex, PosicionPA + 20 + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + 40 + row * distanciaHex),
                                                              (PosicionPA + col * distanciaHex, PosicionPA + 40 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 20 + row * distanciaHex)])
                     if col % 2 == 0:
                         pygame.draw.polygon(screen, YELLOW, [(PosicionPA + col * distanciaHex, PosicionPA + 24 + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + 24 + row * distanciaHex),
                                                              (PosicionPA + 36 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + 64 + row * distanciaHex),
                                                              (PosicionPA + col * distanciaHex, PosicionPA + 64 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex)])
+
+    def evaluate(self):
+        return self.player2bees - self.player1bees
     
+    def get_all_bees(self, owner):
+        bees = []
+        for col in self.board:
+            for cell in col:
+                if type(cell) != int and cell.owner == owner:
+                    bees.append(cell)
+        return bees
+
     def move(self, bee, row, col):
         if type(bee)!=int:
             self.board[bee.col][bee.row],  self.board[col][row] = self.board[col][row], self.board[bee.col][bee.row]
             bee.move(row, col)
-
-
 
     def get_piece(self, row, col):
         if col in range(len(self.board)) and row in range(len(self.board[col])):
