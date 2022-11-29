@@ -87,12 +87,16 @@ def game():
 
     
     while running:
-        if game.turn == "P2":
-            value, new_board = minimax(game.get_board(), 2, True, game, "P2", "P1")
-            game.ai_move(new_board)
+        alpha = float('-inf')
+        beta = float('inf')
+
+        # if game.turn == "P2":
+        #     value, new_board = minimax(game.get_board(), 1, True, game, "P2", "P1", alpha, beta)
+        #     game.ai_move(new_board)
         
+       
         if game.turn == "P1":
-            value, new_board = minimax(game.get_board(), 2, True, game, "P1", "P2")
+            value, new_board = minimax(game.get_board(), 4, True, game, "P1", "P2", alpha, beta)
             game.ai_move(new_board)
 
         if game.winner() != None:

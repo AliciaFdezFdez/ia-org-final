@@ -34,8 +34,11 @@ class Board:
                                                              (PosicionPA + 36 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + 64 + row * distanciaHex),
                                                              (PosicionPA + col * distanciaHex, PosicionPA + 64 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex)])
 
-    def evaluate(self):
-        return self.player2bees - self.player1bees
+    def evaluate(self, player):
+        if player == "P2":
+            return self.player2bees - self.player1bees
+        else:
+            return self.player1bees - self.player2bees
     
     def get_all_bees(self, owner):
         bees = []
