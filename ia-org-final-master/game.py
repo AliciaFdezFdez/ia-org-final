@@ -12,11 +12,8 @@ screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 
 pygame.display.set_caption("Hexabee")
-# icono = pygame.image.load("sprites/bee.png")
-# pygame.display.set_icon(icono)
 
 font = pygame.font.SysFont(None, 30)
-# bee = pygame.image.load("sprites/bee.png")
 
 coord_list = []
 for i in range(50):
@@ -32,8 +29,6 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 click = False
-
-board = Board()
 
 def main_menu():
     while True:
@@ -95,9 +90,9 @@ def game():
         #     game.ai_move(new_board)
         
        
-        if game.turn == "P1":
-            value, new_board = minimax(game.get_board(), 4, True, game, "P1", "P2", alpha, beta)
-            game.ai_move(new_board)
+        # if game.turn == "P1":
+        #     value, new_board = minimax(game.get_board(), 4, True, game, "P1", "P2", alpha, beta)
+        #     game.ai_move(new_board)
 
         if game.winner() != None:
             print(game.winner())
@@ -119,7 +114,6 @@ def game():
         pygame.display.flip()
         clock.tick(30)
 
-
 def options():
     running = True
     while running:
@@ -140,7 +134,6 @@ def options():
 
         pygame.display.flip()
         clock.tick(30)
-
 
 main_menu()
 

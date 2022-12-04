@@ -71,10 +71,8 @@ class GameLogic:
         self.valid_moves = {}
         if self.turn == "P1":
             self.turn = "P2"
-            # print("Ahora es turno del jugador 2")
         else:
             self.turn = "P1"
-            # print("Ahora es turno del jugador 1")
 
     def winner(self):
         return self.board.winner()

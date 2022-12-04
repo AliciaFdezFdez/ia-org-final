@@ -1,4 +1,4 @@
-
+import pygame
 #Colores
 GREEN = (145, 210, 144)
 YELLOW = (255, 237, 81)
@@ -26,3 +26,5 @@ PosicionPA = 110
 distanciaHex = 44
 
 tipos = {GREEN2 : BLUE, BLUE : RED, RED : GREEN2}
+
+BEE = pygame.transform.scale(pygame.image.load('sprites/bee.png'), (44,25))

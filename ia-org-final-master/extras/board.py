@@ -58,7 +58,6 @@ class Board:
             return self.board[col][row]
         return 2
 
-
     def create_board(self):
         counterP1=self.player1bees
         counterP2=self.player2bees
@@ -96,8 +95,7 @@ class Board:
                         cellsLeft -= 1
                 else:
                     self.board[col].append(1)
-
-                
+               
     def draw(self, screen, coord_list):
         self.draw_polygon(screen, coord_list)
         for col in range(0, COLS):
@@ -135,6 +133,18 @@ class Board:
                     self.player2bees -= 1
     
     def winner(self):
+        if self.player1bees + self.player2bees <= 4:
+            bees = self.get_all_bees("P1")+self.get_all_bees("P2")
+            colorCount = 0
+            for i in range(len(bees)):
+                if i == 0:
+                    color = bees[i].color
+                    colorCount += 1
+                else:
+                    if color == bees[i].color:
+                        colorCount += 1
+            if colorCount == len(bees):
+                return "Empate"
         if self.player1bees <= 0:
             return "Gana el jugador 2"
         elif self.player2bees <= 0:

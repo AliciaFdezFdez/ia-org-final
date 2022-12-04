@@ -1,5 +1,5 @@
 import pygame
-from .constants import PosicionPA, distanciaHex, WHITE2, BLACK
+from .constants import PosicionPA, distanciaHex, WHITE2, BLACK, BEE
 
 class Bee:
     PADDING = 4
@@ -16,7 +16,6 @@ class Bee:
         self.x=0
         self.y=0
         self.calc_pos()
-
 
     def calc_pos(self):
         self.x = self.PosicionPA + 12 + self.col * self.distanciaHex
@@ -37,7 +36,6 @@ class Bee:
         else:
             pygame.draw.circle(screen, WHITE2, (self.x, self.y), radius + self.OUTLINE)
         pygame.draw.circle(screen, self.color, (self.x, self.y), radius)
-        
-        
+        screen.blit(BEE, (self.x - BEE.get_width()//2, self.y - BEE.get_height()//2))  
     def __repr__(self):
         return str(self.color)

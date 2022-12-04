@@ -31,7 +31,6 @@ def minimax(position, depth, max_player, game, AIplayer, otherPlayer, alpha, bet
                 best_move = move
         return minEval, best_move
 
-
 def simulate_move(bee, move, board, game, skip):
     if skip:
         board.remove(skip)
