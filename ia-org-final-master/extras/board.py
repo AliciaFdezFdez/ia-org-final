@@ -35,12 +35,18 @@ class Board:
                                                              (PosicionPA + col * distanciaHex, PosicionPA + 64 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex)])
 
     def evaluate(self, player):
+        """
+        Return the difference between player bees/pieces and rival bees/pieces
+        """
         if player == "P2":
             return self.player2bees - self.player1bees
         else:
             return self.player1bees - self.player2bees
     
     def get_all_bees(self, owner):
+        """
+        Returns all the pieces of a given owner
+        """
         bees = []
         for col in self.board:
             for cell in col:
@@ -49,11 +55,17 @@ class Board:
         return bees
 
     def move(self, bee, row, col):
+        """
+        Move bee at certain row-col
+        """
         if type(bee)!=int:
             self.board[bee.col][bee.row],  self.board[col][row] = self.board[col][row], self.board[bee.col][bee.row]
             bee.move(row, col)
 
     def get_piece(self, row, col):
+        """
+        Get piece at certain row-col
+        """
         if col in range(len(self.board)) and row in range(len(self.board[col])):
             return self.board[col][row]
         return 2

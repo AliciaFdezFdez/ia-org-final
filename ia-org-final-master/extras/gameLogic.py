@@ -1,6 +1,6 @@
 import pygame
 from .board import Board
-from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE
+from .constants import PosicionPA, distanciaHex, WHITE
 
 
 class GameLogic:
@@ -54,6 +54,9 @@ class GameLogic:
         return True
     
     def calc_pos(self, row, col):
+        """
+        Returns the position of a row-col pair
+        """
         x = PosicionPA + 12 + col * distanciaHex
         if col % 2 != 0:
             y = PosicionPA + 20 + row * distanciaHex
@@ -62,12 +65,18 @@ class GameLogic:
         return x, y
     
     def draw_valid_moves(self, moves):
+        """
+        Draw valid moves in the board with white dots
+        """
         for move in moves:
             row, col = move
             x, y = self.calc_pos(row, col)
             pygame.draw.circle(self.screen, WHITE, (x, y), 6)
 
     def change_turn(self):
+        """
+        Swap turns between player when its called
+        """
         self.valid_moves = {}
         if self.turn == "P1":
             self.turn = "P2"
@@ -75,11 +84,20 @@ class GameLogic:
             self.turn = "P1"
 
     def winner(self):
+        """
+        Return the winner
+        """
         return self.board.winner()
     
     def get_board(self):
+        """
+        Return the current board
+        """
         return self.board
     
     def ai_move(self, board):
+        """
+        Update board after AI move
+        """
         self.board = board
         self.change_turn()
