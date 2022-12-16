@@ -1,6 +1,9 @@
 import pygame
 from pathlib import Path
 
+FPS = 60
+FONT_SIZE = 30
+
 #Colores
 GREEN = (145, 210, 144)
 YELLOW = (255, 237, 81)
@@ -29,7 +32,7 @@ distanciaHex = 44
 
 tipos = {GREEN2 : BLUE, BLUE : RED, RED : GREEN2}
 
-filename = Path("sprites/bee.png")
+filename = Path("sprites/HexaQueenLogo.png")
 
 
-BEE = pygame.transform.scale(pygame.image.load(filename), (44,25))
+BEE = pygame.transform.scale(pygame.image.load(filename), (30,30))

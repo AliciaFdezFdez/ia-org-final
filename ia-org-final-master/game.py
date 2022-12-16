@@ -1,10 +1,9 @@
 import random
 import pygame
 import sys
-from extras.constants import PosicionPA, GREEN, distanciaHex, YELLOW, BLACK, WIDTH, HEIGHT, size
+from extras.constants import PosicionPA, GREEN, distanciaHex, YELLOW, BLACK, WIDTH, HEIGHT, size, FPS, FONT_SIZE
 from extras.gameLogic import GameLogic
 from minimax.algorithm import minimax 
-
 
 click = False
 
@@ -71,7 +70,7 @@ def main_menu():
 
         # Pygame display and tickrate
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(FPS)
 
 
 def game(mode):
@@ -84,6 +83,9 @@ def game(mode):
 
     # Create GameLogic object which represents the screen and coordinates needed
     game = GameLogic(screen,coord_list)
+
+    # Number of movements that are used to forecast
+    DEPTH = 4
     
     # Main loop of the game
     while running:
@@ -97,12 +99,12 @@ def game(mode):
 
         # If sys.argv[1] = b, player 1 will be a bot, if not it will be a human controlling the player
         if game.turn == "P1" and mode[1]=="b":
-            value, new_board = minimax(game.get_board(), 4, True, game, "P1", "P2", alpha, beta)
+            value, new_board = minimax(game.get_board(), DEPTH, True, game, "P1", "P2", alpha, beta)
             game.ai_move(new_board)
 
         # If sys.argv[2] = b, player 2 will be a bot, if not it will be a human controlling the player
         if game.turn == "P2" and mode[2]=="b":
-            value, new_board = minimax(game.get_board(), 1, True, game, "P2", "P1", alpha, beta)
+            value, new_board = minimax(game.get_board(), DEPTH, True, game, "P2", "P1", alpha, beta)
             game.ai_move(new_board)
         
         # Close the game logic
@@ -123,7 +125,7 @@ def game(mode):
 
         # Pygame display and tickrate
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(FPS)
 
 def options():
     """
@@ -150,7 +152,7 @@ def options():
 
         # Pygame display and tickrate
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(FPS)
 
 # Init program
 if __name__ == "__main__":
@@ -159,8 +161,8 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode(size)
     clock = pygame.time.Clock()
-    pygame.display.set_caption("Hexabee")
-    font = pygame.font.SysFont(None, 30)
+    pygame.display.set_caption("Hexaqueen")
+    font = pygame.font.SysFont(None, FONT_SIZE)
 
     coord_list = []
     

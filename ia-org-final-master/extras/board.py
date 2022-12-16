@@ -36,10 +36,13 @@ class Board:
 
     def evaluate(self, player):
         """
-        Return the difference between player bees/pieces and rival bees/pieces
+        Evaluate function that returns the difference between player bees/pieces and rival bees/pieces
         """
+        # print("---------------------------")
+        # print("p1",self.player1bees)
+        # print("p1",self.player2bees)
         if player == "P2":
-            return self.player2bees - self.player1bees
+            return (self.player2bees - self.player1bees)
         else:
             return self.player1bees - self.player2bees
     
@@ -145,7 +148,7 @@ class Board:
                     self.player2bees -= 1
     
     def winner(self):
-        if self.player1bees + self.player2bees <= 4:
+        if self.player1bees + self.player2bees <= 10:
             bees = self.get_all_bees("P1")+self.get_all_bees("P2")
             colorCount = 0
             for i in range(len(bees)):

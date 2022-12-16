@@ -31,11 +31,12 @@ class Bee:
 
     def draw(self, screen):
         radius = 20 - self.PADDING
+        pygame.draw.circle(screen, self.color, (self.x, self.y), radius + self.OUTLINE)
         if self.owner=="P1":
-            pygame.draw.circle(screen, BLACK, (self.x, self.y), radius + self.OUTLINE)
+            pygame.draw.circle(screen, BLACK, (self.x, self.y), radius)
         else:
-            pygame.draw.circle(screen, WHITE2, (self.x, self.y), radius + self.OUTLINE)
-        pygame.draw.circle(screen, self.color, (self.x, self.y), radius)
-        screen.blit(BEE, (self.x - BEE.get_width()//2, self.y - BEE.get_height()//2))  
+            pygame.draw.circle(screen, WHITE2, (self.x, self.y), radius)
+        screen.blit(BEE, (self.x - BEE.get_width()//2, self.y - BEE.get_height()//2))
+
     def __repr__(self):
         return str(self.color)

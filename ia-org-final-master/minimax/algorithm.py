@@ -1,8 +1,17 @@
 from copy import deepcopy
+import pygame
+import random
+import sys
+
+WIDTH = 520
+HEIGHT = 540
 
 def minimax(position, depth, max_player, game, AIplayer, otherPlayer, alpha, beta):
     """
-    Minimax complete algorithm
+    Minimax complete algorithm, it receives:
+        - position: the board with all the details of pieces
+        - depth: how many positions to consider 
+        - max_player: true if we are looking to maximize the score
     """
     # If there is no depth or a winner we dont need to evaluate more
     if depth == 0 or position.winner() != None:
@@ -20,10 +29,12 @@ def minimax(position, depth, max_player, game, AIplayer, otherPlayer, alpha, bet
         for move in get_all_moves(position, AIplayer, game):
             # Recursive call to calculate the evaluation
             evaluation = minimax(move, depth-1, False, game, AIplayer, otherPlayer, alpha, beta)[0]
+            # Update the max evaluation
             maxEval = max(maxEval, evaluation)
             alpha = max(alpha, evaluation)
             if beta <= alpha:
                 break
+            # If the current max eval is equal to the last evaluation, save the move as best move
             if maxEval == evaluation:
                 best_move = move
         return maxEval, best_move
@@ -31,13 +42,19 @@ def minimax(position, depth, max_player, game, AIplayer, otherPlayer, alpha, bet
     else:
         # With no evaluations we set it to the worst case
         minEval = float('inf')
+        
+        # Store the best move we can make
         best_move = None
+        # Iterate to all moves that player can do
         for move in get_all_moves(position, otherPlayer, game):
+            # Recursive call to calculate the evaluation
             evaluation = minimax(move, depth-1, True, game, AIplayer, otherPlayer, alpha, beta)[0]
+            # Update the min evaluation
             minEval = min(minEval, evaluation)
             beta = min(beta, evaluation)
             if beta <= alpha:
                 break
+            # If the current max eval is equal to the last evaluation, save the move as best move
             if minEval == evaluation:
                 best_move = move
         return minEval, best_move
@@ -66,6 +83,9 @@ def get_all_moves(board, owner, game):
 
         # move: position of the move -> (row,col) skip: pieces that are eliminated in that process -> [pieces]
         for move, skip in valid_moves.items():
+            # Draw the moves that the AI is calculating
+            if sys.argv[3]=="t":
+                draw_moves(game, board, bee)
             # Deepcopy board to simulate move
             temp_board = deepcopy(board)
             # Auxiliar bee/piece
@@ -75,3 +95,22 @@ def get_all_moves(board, owner, game):
             # Add the board after the simulated move
             moves.append(new_board)
     return moves
+
+def draw_moves(game, board, piece):
+    """
+    Draw the moves that the AI is calculating
+    """
+    valid_moves = board.get_valid_moves(piece)
+    coord_list = []
+    
+    for i in range(50):
+        x = random.randint(0, WIDTH)
+        y = random.randint(0, HEIGHT)
+        coord_list.append([x, y])
+    
+    board.draw(game.screen, coord_list)
+    pygame.draw.circle(game.screen, (0,255,0), (piece.x, piece.y), 50, 5)
+    game.draw_valid_moves(valid_moves.keys())
+    pygame.display.update()
+    
+    pygame.time.delay(100)
