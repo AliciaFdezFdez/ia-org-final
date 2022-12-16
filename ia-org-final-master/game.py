@@ -3,9 +3,9 @@ import pygame
 import sys
 from extras.constants import PosicionPA, GREEN, distanciaHex, YELLOW, BLACK, WIDTH, HEIGHT, size, FPS, FONT_SIZE
 from extras.gameLogic import GameLogic
-from minimax.algorithm import minimax 
+from minimax.algorithm import minimax, negamax 
 
-click = False
+
 
 def draw_text(text, font, color, surface, x, y):
     "Draw text method"
@@ -46,7 +46,7 @@ def main_menu():
         # If boton_jugar is clicked, initialize the game
         if boton_jugar.collidepoint((mx, my)):
             if click:
-                game(sys.argv)
+                game()
 
         # If boton_creditos is clicked, initialize the credits
         if boton_creditos.collidepoint((mx, my)):
@@ -73,7 +73,7 @@ def main_menu():
         clock.tick(FPS)
 
 
-def game(mode):
+def game():
     """
     Main game loop
     """
@@ -84,28 +84,53 @@ def game(mode):
     # Create GameLogic object which represents the screen and coordinates needed
     game = GameLogic(screen,coord_list)
 
-    # Number of movements that are used to forecast
-    DEPTH = 4
+
     
     # Main loop of the game
     while running:
         alpha = float('-inf')
         beta = float('inf')
 
+
+        # P1 is a bot
+        if game.turn == "P1" and mode[1] == "b":
+            # With minimax selected as algorithm
+            if mode[2] == 'minimax' or mode[5]== 'minimax':
+                # Long command version
+                if len(sys.argv)== 8:
+                    value, new_board = minimax(game.get_board(), int(mode[3]), True, game, "P1", "P2", alpha, beta)
+                # Short command version
+                else:
+                    value, new_board = minimax(game.get_board(), int(mode[6]), True, game, "P1", "P2", alpha, beta)
+                game.ai_move(new_board)
+            # With negamax selected as algorithm
+            elif mode[2] == 'negamax' or mode[5]== 'negamax':
+                # Long command version
+                if len(sys.argv)== 8:
+                    value, new_board = negamax(game.get_board(), int(mode[3]), True, game, "P1", "P2", alpha, beta)
+                # Short command version
+                else:
+                    value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P1", "P2", alpha, beta)
+                game.ai_move(new_board)
+
+        # P2 is a bot
+        if game.turn == "P2" and mode[4] == "b":
+            # With minimax selected as algorithm
+            if mode[5] == 'minimax':
+                value, new_board = minimax(game.get_board(), int(mode[3]), True, game, "P2", "P1", alpha, beta)
+                game.ai_move(new_board)
+            # With negamax selected as algorithm
+            elif mode[5] == 'negamax':
+                value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P2", "P1", alpha, beta)
+                game.ai_move(new_board)
+            
+        
+
+                
         # Check if there is already a winner to end game
         if game.winner() != None:
             print(game.winner())
             running = False
-
-        # If sys.argv[1] = b, player 1 will be a bot, if not it will be a human controlling the player
-        if game.turn == "P1" and mode[1]=="b":
-            value, new_board = minimax(game.get_board(), DEPTH, True, game, "P1", "P2", alpha, beta)
-            game.ai_move(new_board)
-
-        # If sys.argv[2] = b, player 2 will be a bot, if not it will be a human controlling the player
-        if game.turn == "P2" and mode[2]=="b":
-            value, new_board = minimax(game.get_board(), DEPTH, True, game, "P2", "P1", alpha, beta)
-            game.ai_move(new_board)
         
         # Close the game logic
         for event in pygame.event.get():
@@ -135,7 +160,6 @@ def options():
     while running:
         # Close the game logic
         for event in pygame.event.get():
-            # print(event)
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.KEYDOWN:
@@ -157,19 +181,33 @@ def options():
 # Init program
 if __name__ == "__main__":
     
-    # Pygame init
-    pygame.init()
-    screen = pygame.display.set_mode(size)
-    clock = pygame.time.Clock()
-    pygame.display.set_caption("Hexaqueen")
-    font = pygame.font.SysFont(None, FONT_SIZE)
+    if not ((len(sys.argv) == 6 or len(sys.argv) == 8)):
+        print("Too many arguments for the program, you have to invoke it with the following strucure:\n\npython game.py h b minimax 2 f\n\nor if you want to versus AIs\n\npython game.py b negamax 2 b minimax 2 f\n")
 
-    coord_list = []
-    
-    for i in range(50):
-        x = random.randint(0, WIDTH)
-        y = random.randint(0, HEIGHT)
-        coord_list.append([x, y])
+    else:
+        
+        if len(sys.argv) == 6:
 
-    main_menu()
+            mode = [sys.argv[0], sys.argv[1], None, None, sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5]]
+
+        else:
+            mode = sys.argv.copy()
+
+        click = False
+
+        # Pygame init
+        pygame.init()
+        screen = pygame.display.set_mode(size)
+        clock = pygame.time.Clock()
+        pygame.display.set_caption("HexaQueen")
+        font = pygame.font.SysFont(None, FONT_SIZE)
+
+        coord_list = []
+        
+        for i in range(50):
+            x = random.randint(0, WIDTH)
+            y = random.randint(0, HEIGHT)
+            coord_list.append([x, y])
+
+        main_menu()
 

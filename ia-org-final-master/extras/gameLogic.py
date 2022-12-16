@@ -33,10 +33,13 @@ class GameLogic:
                 self.select(row, col)
         
         bee = self.board.get_piece(row, col)
-        if bee != 0 and bee.owner == self.turn:
-            self.selected = bee
-            self.valid_moves = self.board.get_valid_moves(bee)
-            return True
+        try:
+            if bee != 0 and bee.owner == self.turn:
+                self.selected = bee
+                self.valid_moves = self.board.get_valid_moves(bee)
+                return True
+        except AttributeError:
+            pass
             
         return False
 

@@ -1,5 +1,5 @@
 import pygame
-from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, YE, GREEN2, HEIGHT, YELLOW, tipos
+from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, YE, GREEN2, HEIGHT, YELLOW, tipos, VALIDPOS
 from .bee import Bee
     
 class Board:
@@ -38,13 +38,11 @@ class Board:
         """
         Evaluate function that returns the difference between player bees/pieces and rival bees/pieces
         """
-        # print("---------------------------")
-        # print("p1",self.player1bees)
-        # print("p1",self.player2bees)
         if player == "P2":
             return (self.player2bees - self.player1bees)
         else:
             return self.player1bees - self.player2bees
+
     
     def get_all_bees(self, owner):
         """
@@ -125,14 +123,18 @@ class Board:
         posBee = (bee.row, bee.col)
         for futureCol in range (0, COLS):
             for futureRow in range (0, len(ROWS)):
-                if self._distancia(posBee, (futureRow, futureCol)) == 1 and self.board[futureCol][futureRow]==0:
-                    moves[(futureRow, futureCol)]=[]
-                elif self._distancia(posBee, (futureRow, futureCol)) == 1 and type(self.board[futureCol][futureRow])!=int:
+                if self._distancia(posBee, (futureRow, futureCol)) == 1 and self.board[futureCol][futureRow]==0 and VALIDPOS[posBee]:
+                    for i in VALIDPOS[posBee]:
+                            if i == (futureRow, futureCol):
+                                moves[(futureRow, futureCol)]=[]
+                elif self._distancia(posBee, (futureRow, futureCol)) == 1 and type(self.board[futureCol][futureRow])!=int  and VALIDPOS[posBee]:
                     otherBee = self.board[futureCol][futureRow]
                     if otherBee.owner != bee.owner:
                         weakness = tipos[bee.color]
                         if otherBee.color == weakness:
-                            moves[(futureRow, futureCol)] = [otherBee]
+                            for i in VALIDPOS[posBee]:
+                                if i == (futureRow, futureCol):
+                                    moves[(futureRow, futureCol)] = [otherBee]
         return moves
     
     def _distancia(self, a, b):
