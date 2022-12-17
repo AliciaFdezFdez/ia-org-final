@@ -88,9 +88,6 @@ def game():
     
     # Main loop of the game
     while running:
-        alpha = float('-inf')
-        beta = float('inf')
-
 
         # P1 is a bot
         if game.turn == "P1" and mode[1] == "b":
@@ -98,30 +95,30 @@ def game():
             if mode[2] == 'minimax' or mode[5]== 'minimax':
                 # Long command version
                 if len(sys.argv)== 8:
-                    value, new_board = minimax(game.get_board(), int(mode[3]), True, game, "P1", "P2", alpha, beta)
+                    value, new_board = minimax(game.get_board(), int(mode[3]), True, game, "P1", "P2")
                 # Short command version
                 else:
-                    value, new_board = minimax(game.get_board(), int(mode[6]), True, game, "P1", "P2", alpha, beta)
+                    value, new_board = minimax(game.get_board(), int(mode[6]), True, game, "P1", "P2")
                 game.ai_move(new_board)
             # With negamax selected as algorithm
             elif mode[2] == 'negamax' or mode[5]== 'negamax':
                 # Long command version
                 if len(sys.argv)== 8:
-                    value, new_board = negamax(game.get_board(), int(mode[3]), True, game, "P1", "P2", alpha, beta)
+                    value, new_board = negamax(game.get_board(), int(mode[3]), True, game, "P1", "P2")
                 # Short command version
                 else:
-                    value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P1", "P2", alpha, beta)
+                    value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P1", "P2")
                 game.ai_move(new_board)
 
         # P2 is a bot
         if game.turn == "P2" and mode[4] == "b":
-            # With minimax selected as algorithm
+            # With minimax selected as algorithm  
             if mode[5] == 'minimax':
-                value, new_board = minimax(game.get_board(), int(mode[3]), True, game, "P2", "P1", alpha, beta)
+                value, new_board = minimax(game.get_board(), int(mode[6]), True, game, "P2", "P1")
                 game.ai_move(new_board)
             # With negamax selected as algorithm
             elif mode[5] == 'negamax':
-                value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P2", "P1", alpha, beta)
+                value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P2", "P1")
                 game.ai_move(new_board)
             
         

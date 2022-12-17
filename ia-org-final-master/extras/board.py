@@ -39,7 +39,7 @@ class Board:
         Evaluate function that returns the difference between player bees/pieces and rival bees/pieces
         """
         if player == "P2":
-            return (self.player2bees - self.player1bees)
+            return self.player2bees - self.player1bees
         else:
             return self.player1bees - self.player2bees
 
@@ -72,8 +72,8 @@ class Board:
         return 2
 
     def create_board(self):
-        counterP1=self.player1bees
-        counterP2=self.player2bees
+        counterP1 = self.player1bees
+        counterP2 = self.player2bees
         cellsLeft = self.boardSize
         for col in range(0, COLS):
             self.board.append([])
