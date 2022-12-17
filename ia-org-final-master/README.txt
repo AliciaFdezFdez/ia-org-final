@@ -16,13 +16,13 @@ B vs B python game.py b negamax 3 b minimax 2 f
 
 [ESP]
 
-ARGS si existe 1 IA: game.py [JUGAOOR1] [JUGADOR2] [ALGORITMO] [PROFUNDIDAD] [PROCESO-IA]
+ARGS si existe 1 IA: game.py [JUGADOR1] [JUGADOR2] [ALGORITMO] [PROFUNDIDAD] [PROCESO-IA]
 
-ARGS si existe 2 IA: game.py [JUGAOOR1] [ALGORITMO] [PROFUNDIDAD] [JUGAOOR2] [ALGORITMO] [PROFUNDIDAD] [PROCESO-IA]
+ARGS si existe 2 IA: game.py [JUGADOR1] [ALGORITMO] [PROFUNDIDAD] [JUGADOR2] [ALGORITMO] [PROFUNDIDAD] [PROCESO-IA]
 
-JUGAOOR1 y JUGAOOR2: h - humano o b - bot
+JUGADOR1 y JUGADOR2: h - humano o b - bot
 ALGORITMO: minimax - algoritmo minimax or negamax - algoritmo negamax
-PROFUNDIDAD: int - num de movimientos utilizados para la previsión
+PROFUNDIDAD: int - número de movimientos utilizados para la previsión
 PROCESO-IA: t - true, puedes ver el proceso de escoger movimiento o f - false, no puedes ver el proceso de escoger movimiento
 
 Ejemplo básico:

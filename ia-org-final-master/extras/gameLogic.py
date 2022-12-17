@@ -9,10 +9,13 @@ class GameLogic:
         self._init()
         self.screen = screen
         self.coord_list = coord_list
-        self.board=Board()
+        self.board = Board()
+        self.selected = None
+        self.valid_moves = None
+        self.turn = None
     
     def update(self):
-        self.board.draw(self.screen,self.coord_list)
+        self.board.draw(self.screen, self.coord_list)
         self.draw_valid_moves(self.valid_moves)
         pygame.display.update()
     
@@ -45,7 +48,7 @@ class GameLogic:
 
     def _move(self, row, col):
         cell = self.board.get_piece(row, col)
-        if self.selected and cell !=1 and (row, col) in self.valid_moves:
+        if self.selected and cell != 1 and (row, col) in self.valid_moves:
             skipped = self.valid_moves[(row, col)]
             if skipped:
                 self.board.remove(skipped)
@@ -55,8 +58,9 @@ class GameLogic:
             return False
 
         return True
-    
-    def calc_pos(self, row, col):
+
+    @staticmethod
+    def calc_pos(row, col):
         """
         Returns the position of a row-col pair
         """
@@ -66,7 +70,7 @@ class GameLogic:
         else:
             y = PosicionPA + 44 + row * distanciaHex
         return x, y
-    
+
     def draw_valid_moves(self, moves):
         """
         Draw valid moves in the board with white dots
