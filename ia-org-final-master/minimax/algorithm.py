@@ -53,6 +53,7 @@ def minimax(position, depth, max_player, game, AIplayer, otherPlayer):
                 best_move = move
         return minEval, best_move
 
+
 def negamax(position, depth, max_player, game, AIplayer, otherPlayer):
     """
     Negamax complete algorithm
@@ -133,7 +134,7 @@ def get_all_moves(board, owner, game):
             new_board = simulate_move(temp_bee, move, temp_board, game, skip)
             # Add the board after the simulated move
             moves.append(new_board)
-
+    
     random.shuffle(moves)
     return moves
 

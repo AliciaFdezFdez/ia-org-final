@@ -35,6 +35,7 @@ class Board:
                                                              (PosicionPA + col * distanciaHex, PosicionPA + 64 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex)])
 
     def evaluate(self, player):
+        
         """
         Evaluate function that returns the difference between player bees/pieces and rival bees/pieces
         """
