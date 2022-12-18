@@ -6,28 +6,27 @@ from extras.gameLogic import GameLogic
 from minimax.algorithm import minimax, negamax 
 
 
-def draw_text(text, fnt, color, surface, pos_x, pos_y):
-    """Draw text method"""
-    textobj = fnt.render(text, 1, color)
+
+def draw_text(text, font, color, surface, x, y):
+    "Draw text method"
+    textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
-    textrect.topleft = (pos_x, pos_y)
+    textrect.topleft = (x,y)
     surface.blit(textobj, textrect)
 
-
-def get_row_col_from_mouse(pos: tuple) -> tuple:
+def get_row_col_from_mouse(pos:tuple)->tuple:
     """
-    Method that implements the logic to control the cell that you are clicking at with the mouse
+    Method that implments the logic to control the cell that you are clicking at with the mouse 
     """
-    pos_x, pos_y = pos
+    x, y = pos
     
-    col = round((pos_x - (PosicionPA + 12)) / distanciaHex)
+    col=round((x-(PosicionPA + 12))/distanciaHex)
     if col % 2 != 0:
-        row = round((pos_y - (PosicionPA + 20)) / distanciaHex)
+        row = round((y -(PosicionPA + 20))/ distanciaHex)
     else:
-        row = round((pos_y - (PosicionPA + 44)) / distanciaHex)
+        row = round((y -(PosicionPA + 44))/ distanciaHex)
 
     return row, col
-
 
 def main_menu():
     """
@@ -83,46 +82,51 @@ def game():
     running = True
 
     # Create GameLogic object which represents the screen and coordinates needed
-    game_logic = GameLogic(screen, coord_list)
+    game = GameLogic(screen,coord_list)
 
+
+    
     # Main loop of the game
     while running:
 
         # P1 is a bot
-        if game_logic.turn == "P1" and mode[1] == "b":
+        if game.turn == "P1" and mode[1] == "b":
             # With minimax selected as algorithm
-            if mode[2] == 'minimax' or mode[5] == 'minimax':
+            if mode[2] == 'minimax' or mode[5]== 'minimax':
                 # Long command version
-                if len(sys.argv) == 8:
-                    value, new_board = minimax(game_logic.get_board(), int(mode[3]), True, game_logic, "P1", "P2")
+                if len(sys.argv)== 8:
+                    value, new_board = minimax(game.get_board(), int(mode[3]), True, game, "P1", "P2")
                 # Short command version
                 else:
-                    value, new_board = minimax(game_logic.get_board(), int(mode[6]), True, game_logic, "P1", "P2")
-                game_logic.ai_move(new_board)
+                    value, new_board = minimax(game.get_board(), int(mode[6]), True, game, "P1", "P2")
+                game.ai_move(new_board)
             # With negamax selected as algorithm
-            elif mode[2] == 'negamax' or mode[5] == 'negamax':
+            elif mode[2] == 'negamax' or mode[5]== 'negamax':
                 # Long command version
-                if len(sys.argv) == 8:
-                    value, new_board = negamax(game_logic.get_board(), int(mode[3]), True, game_logic, "P1", "P2")
+                if len(sys.argv)== 8:
+                    value, new_board = negamax(game.get_board(), int(mode[3]), True, game, "P1", "P2")
                 # Short command version
                 else:
-                    value, new_board = negamax(game_logic.get_board(), int(mode[6]), True, game_logic, "P1", "P2")
-                game_logic.ai_move(new_board)
+                    value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P1", "P2")
+                game.ai_move(new_board)
 
         # P2 is a bot
-        if game_logic.turn == "P2" and mode[4] == "b":
+        if game.turn == "P2" and mode[4] == "b":
             # With minimax selected as algorithm  
             if mode[5] == 'minimax':
-                value, new_board = minimax(game_logic.get_board(), int(mode[6]), True, game_logic, "P2", "P1")
-                game_logic.ai_move(new_board)
+                value, new_board = minimax(game.get_board(), int(mode[6]), True, game, "P2", "P1")
+                game.ai_move(new_board)
             # With negamax selected as algorithm
             elif mode[5] == 'negamax':
-                value, new_board = negamax(game_logic.get_board(), int(mode[6]), True, game_logic, "P2", "P1")
-                game_logic.ai_move(new_board)
+                value, new_board = negamax(game.get_board(), int(mode[6]), True, game, "P2", "P1")
+                game.ai_move(new_board)
+            
+        
 
+                
         # Check if there is already a winner to end game
-        if game_logic.winner() is not None:
-            print(game_logic.winner())
+        if game.winner() != None:
+            print(game.winner())
             running = False
         
         # Close the game logic
@@ -136,15 +140,14 @@ def game():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 row, col = get_row_col_from_mouse(pos)
-                game_logic.select(row, col)
+                game.select(row, col)
 
         # Game update
-        game_logic.update()
+        game.update()
 
         # Pygame display and tickrate
         pygame.display.flip()
         clock.tick(FPS)
-
 
 def options():
     """
@@ -172,13 +175,11 @@ def options():
         pygame.display.flip()
         clock.tick(FPS)
 
-
 # Init program
 if __name__ == "__main__":
     
-    if not (len(sys.argv) == 6 or len(sys.argv) == 8):
-        print("Too many arguments for the program, you have to invoke it with the following structure:\n\npython "
-              "game.py h b minimax 2 f\n\nor if you want to versus AIs\n\npython game.py b negamax 2 b minimax 2 f\n")
+    if not ((len(sys.argv) == 6 or len(sys.argv) == 8)):
+        print("Too many arguments for the program, you have to invoke it with the following strucure:\n\npython game.py h b minimax 2 f\n\nor if you want to versus AIs\n\npython game.py b negamax 2 b minimax 2 f\n")
 
     else:
         
@@ -206,3 +207,4 @@ if __name__ == "__main__":
             coord_list.append([x, y])
 
         main_menu()
+

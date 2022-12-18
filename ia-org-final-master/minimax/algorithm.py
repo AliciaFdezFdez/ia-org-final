@@ -6,62 +6,61 @@ import sys
 WIDTH = 520
 HEIGHT = 540
 
-
-def minimax(position, depth, max_player, game, ai_player, other_player):
+def minimax(position, depth, max_player, game, AIplayer, otherPlayer):
     """
     Minimax complete algorithm, it receives:
         - position: the board with all the details of pieces
         - depth: how many positions to consider 
         - max_player: true if we are looking to maximize the score
     """
-    # If there is no depth or a winner we don't need to evaluate more
-    if depth == 0 or position.winner() is not None:
-        return position.evaluate(ai_player), position
+    # If there is no depth or a winner we dont need to evaluate more
+    if depth == 0 or position.winner() != None:
+        return position.evaluate(AIplayer), position
     
     # If there is a max_player we are going to maximize
     if max_player:
         # With no evaluations we set it to the worst case
-        max_eval = float('-inf')
+        maxEval = float('-inf')
 
         # Store the best move we can make
         best_move = None
 
         # Iterate to all moves that player can do
-        for move in get_all_moves(position, ai_player, game):
+        for move in get_all_moves(position, AIplayer, game):
             # Recursive call to calculate the evaluation
-            evaluation = minimax(move, depth - 1, False, game, ai_player, other_player)[0]
+            evaluation = minimax(move, depth-1, False, game, AIplayer, otherPlayer)[0]
             # Update the max evaluation
-            max_eval = max(max_eval, evaluation)
+            maxEval = max(maxEval, evaluation)
             # If the current max eval is equal to the last evaluation, save the move as best move
-            if max_eval == evaluation:
+            if maxEval == evaluation:
                 best_move = move
-        return max_eval, best_move
+        return maxEval, best_move
 
     else:
         # With no evaluations we set it to the worst case
-        min_eval = float('inf')
+        minEval = float('inf')
         
         # Store the best move we can make
         best_move = None
         # Iterate to all moves that player can do
-        for move in get_all_moves(position, other_player, game):
+        for move in get_all_moves(position, otherPlayer, game):
             # Recursive call to calculate the evaluation
-            evaluation = minimax(move, depth - 1, True, game, ai_player, other_player)[0]
+            evaluation = minimax(move, depth-1, True, game, AIplayer, otherPlayer)[0]
             # Update the min evaluation
-            min_eval = min(min_eval, evaluation)
+            minEval = min(minEval, evaluation)
             # If the current max eval is equal to the last evaluation, save the move as best move
-            if min_eval == evaluation:
+            if minEval == evaluation:
                 best_move = move
-        return min_eval, best_move
+        return minEval, best_move
 
 
-def negamax(position, depth, max_player, game, ai_player, other_player):
+def negamax(position, depth, max_player, game, AIplayer, otherPlayer):
     """
     Negamax complete algorithm
     """
-    # If there is no depth or a winner we don't need to evaluate more
-    if depth == 0 or position.winner() is not None:
-        return position.evaluate(ai_player), position
+    # If there is no depth or a winner we dont need to evaluate more
+    if depth == 0 or position.winner() != None:
+        return position.evaluate(AIplayer), position
 
     # With no evaluations we set it to the worst case
     best_value = -float("inf")
@@ -72,9 +71,9 @@ def negamax(position, depth, max_player, game, ai_player, other_player):
     # If the player is the AI player, we are going to maximize
     if max_player:
         # Iterate to all moves that player can do
-        for move in get_all_moves(position, ai_player, game):
+        for move in get_all_moves(position, AIplayer, game):
             # Recursive call to calculate the evaluation
-            evaluation = negamax(move, depth - 1, False, game, ai_player, other_player)[0]
+            evaluation  = negamax(move, depth-1, False, game, AIplayer, otherPlayer)[0]
             if evaluation != 0:
                 neg_ev = -evaluation
             else:
@@ -85,8 +84,8 @@ def negamax(position, depth, max_player, game, ai_player, other_player):
                 best_move = move
     # If the player is the other player, we are going to minimize
     else:
-        for move in get_all_moves(position, other_player, game):
-            evaluation = negamax(move, depth - 1, True, game, ai_player, other_player)[0]
+        for move in get_all_moves(position, otherPlayer, game):
+            evaluation  = negamax(move, depth-1, True, game, AIplayer, otherPlayer)[0]
             if evaluation != 0:
                 neg_ev = -evaluation
             else:
@@ -99,8 +98,7 @@ def negamax(position, depth, max_player, game, ai_player, other_player):
 
     return best_value, best_move
 
-
-def simulate_move(bee, move, board, skip):
+def simulate_move(bee, move, board, game, skip):
     """
     Simulate a move a return the board after that move
     """
@@ -110,16 +108,15 @@ def simulate_move(bee, move, board, skip):
 
     return board
 
-
 def get_all_moves(board, owner, game):
     """
     Return all the posible moves that a player can do in a given game state
     """
 
-    # List that represents all the list [board, piece] in which board is the new board after moving that piece
+    # List that represents all the list [board, pice] in which board is the new board after moving that piece
     moves = []
 
-    # Iterate through all the pieces of the owner
+    # Iterate throught all the pieces of the owner
     for bee in board.get_all_bees(owner):
         # Get the valid moves of the board
         valid_moves = board.get_valid_moves(bee)
@@ -127,20 +124,19 @@ def get_all_moves(board, owner, game):
         # move: position of the move -> (row,col) skip: pieces that are eliminated in that process -> [pieces]
         for move, skip in valid_moves.items():
             # Draw the moves that the AI is calculating
-            if (len(sys.argv) == 9 and sys.argv[7] == "t") or (len(sys.argv) == 6 and sys.argv[5] == "t"):
+            if (len(sys.argv)==9 and sys.argv[7]=="t") or (len(sys.argv)==6 and sys.argv[5]=="t"):
                 draw_moves(game, board, bee)
             # Deepcopy board to simulate move
             temp_board = deepcopy(board)
             # Auxiliar bee/piece
             temp_bee = temp_board.get_piece(bee.row, bee.col)
             # Simulate the move with auxiliar variables
-            new_board = simulate_move(temp_bee, move, temp_board, skip)
+            new_board = simulate_move(temp_bee, move, temp_board, game, skip)
             # Add the board after the simulated move
             moves.append(new_board)
     
     random.shuffle(moves)
     return moves
-
 
 def draw_moves(game, board, piece):
     """
@@ -155,7 +151,7 @@ def draw_moves(game, board, piece):
         coord_list.append([x, y])
     
     board.draw(game.screen, coord_list)
-    pygame.draw.circle(game.screen, (0, 255, 0), (piece.x, piece.y), 50, 5)
+    pygame.draw.circle(game.screen, (0,255,0), (piece.x, piece.y), 50, 5)
     game.draw_valid_moves(valid_moves.keys())
     pygame.display.update()
     

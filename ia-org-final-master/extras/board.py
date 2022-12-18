@@ -1,9 +1,7 @@
 import pygame
-from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, YE, GREEN2, HEIGHT, YELLOW,\
-    tipos, VALIDPOS
+from .constants import PosicionPA, ROWS, GREEN, distanciaHex, COLS, WHITE, RED, BLUE, YE, GREEN2, HEIGHT, YELLOW, tipos, VALIDPOS
 from .bee import Bee
-
-
+    
 class Board:
 
     def __init__(self):
@@ -11,14 +9,13 @@ class Board:
         self.selected_piece = None
         self.player1bees = self.player2bees = 6
 
-        self.boardSize = 0
+        self.boardSize=0
         for r in ROWS:
             self.boardSize += len(r)
         
         self.create_board()
     
-    @staticmethod
-    def draw_polygon(screen, coord_list):
+    def draw_polygon(self, screen, coord_list):
         screen.fill(GREEN)
         for z in coord_list:
             pygame.draw.circle(screen, WHITE, z, 2)
@@ -29,26 +26,13 @@ class Board:
             for row in range(0, len(ROWS)):
                 if col in ROWS[row]:
                     if col % 2 != 0:
-                        pygame.draw.polygon(screen, YE, [(PosicionPA + col * distanciaHex, PosicionPA + row *
-                                                          distanciaHex), (PosicionPA + 24 + col * distanciaHex,
-                                                                          PosicionPA + row * distanciaHex),
-                                                         (PosicionPA + 36 + col * distanciaHex, PosicionPA + 20 + row *
-                                                          distanciaHex), (PosicionPA + 24 + col * distanciaHex,
-                                                                          PosicionPA + 40 + row * distanciaHex),
-                                                         (PosicionPA + col * distanciaHex, PosicionPA + 40 + row *
-                                                          distanciaHex), (PosicionPA - 12 + col * distanciaHex,
-                                                                          PosicionPA + 20 + row * distanciaHex)])
+                        pygame.draw.polygon(screen, YE, [(PosicionPA + col * distanciaHex, PosicionPA + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + row * distanciaHex),
+                                                             (PosicionPA + 36 + col * distanciaHex, PosicionPA + 20 + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + 40 + row * distanciaHex),
+                                                             (PosicionPA + col * distanciaHex, PosicionPA + 40 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 20 + row * distanciaHex)])
                     if col % 2 == 0:
-                        pygame.draw.polygon(screen, YELLOW, [(PosicionPA + col * distanciaHex, PosicionPA + 24 + row *
-                                                              distanciaHex), (PosicionPA + 24 + col * distanciaHex,
-                                                                              PosicionPA + 24 + row * distanciaHex),
-                                                             (PosicionPA + 36 + col * distanciaHex, PosicionPA + 44 +
-                                                              row * distanciaHex), (PosicionPA + 24 + col *
-                                                                                    distanciaHex, PosicionPA + 64 +
-                                                                                    row * distanciaHex),
-                                                             (PosicionPA + col * distanciaHex, PosicionPA + 64 + row *
-                                                              distanciaHex), (PosicionPA - 12 + col * distanciaHex,
-                                                                              PosicionPA + 44 + row * distanciaHex)])
+                        pygame.draw.polygon(screen, YELLOW, [(PosicionPA + col * distanciaHex, PosicionPA + 24 + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + 24 + row * distanciaHex),
+                                                             (PosicionPA + 36 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex), (PosicionPA + 24 + col * distanciaHex, PosicionPA + 64 + row * distanciaHex),
+                                                             (PosicionPA + col * distanciaHex, PosicionPA + 64 + row * distanciaHex), (PosicionPA - 12 + col * distanciaHex, PosicionPA + 44 + row * distanciaHex)])
 
     def evaluate(self, player):
         
@@ -60,6 +44,7 @@ class Board:
         else:
             return self.player1bees - self.player2bees
 
+    
     def get_all_bees(self, owner):
         """
         Returns all the pieces of a given owner
@@ -75,7 +60,7 @@ class Board:
         """
         Move bee at certain row-col
         """
-        if type(bee) != int:
+        if type(bee)!=int:
             self.board[bee.col][bee.row],  self.board[col][row] = self.board[col][row], self.board[bee.col][bee.row]
             bee.move(row, col)
 
@@ -88,40 +73,40 @@ class Board:
         return 2
 
     def create_board(self):
-        counter_p1 = self.player1bees
-        counter_p2 = self.player2bees
-        cells_left = self.boardSize
+        counterP1 = self.player1bees
+        counterP2 = self.player2bees
+        cellsLeft = self.boardSize
         for col in range(0, COLS):
             self.board.append([])
             for row in range(0, len(ROWS)):
                 if col in ROWS[row]:
-                    if counter_p1 > 0:
-                        if counter_p1 > 4:
+                    if counterP1 > 0:
+                        if counterP1 > 4:
                             bee = Bee(row, col, GREEN2, "P1")
                             self.board[col].append(bee)
-                        elif 2 < counter_p1 <= 4:
+                        elif counterP1 > 2 and counterP1 <= 4:
                             bee = Bee(row, col, RED, "P1")
                             self.board[col].append(bee)
-                        elif 0 < counter_p1 <= 2:
+                        elif counterP1 > 0 and counterP1 <= 2:
                             bee = Bee(row, col, BLUE, "P1")
                             self.board[col].append(bee)
-                        counter_p1 -= 1
-                        cells_left -= 1
-                    elif counter_p2 > 0 and cells_left <= 6:
-                        if counter_p2 > 4:
+                        counterP1 -= 1
+                        cellsLeft -= 1
+                    elif counterP2 > 0 and cellsLeft <= 6:
+                        if counterP2 > 4:
                             bee = Bee(row, col, BLUE, "P2")
                             self.board[col].append(bee)
-                        elif 2 < counter_p2 <= 4:
+                        elif counterP2 > 2 and counterP2 <= 4:
                             bee = Bee(row, col, RED, "P2")
                             self.board[col].append(bee)
-                        elif 0 < counter_p2 <= 2:
+                        elif counterP2 > 0 and counterP2 <= 2:
                             bee = Bee(row, col, GREEN2, "P2")
                             self.board[col].append(bee)
-                        counter_p2 -= 1
-                        cells_left -= 1
+                        counterP2 -= 1
+                        cellsLeft -= 1
                     else:
                         self.board[col].append(0)
-                        cells_left -= 1
+                        cellsLeft -= 1
                 else:
                     self.board[col].append(1)
                
@@ -136,27 +121,24 @@ class Board:
                         
     def get_valid_moves(self, bee):
         moves = {}
-        pos_bee = (bee.row, bee.col)
-        for futureCol in range(0, COLS):
-            for futureRow in range(0, len(ROWS)):
-                if self._distancia(pos_bee, (futureRow, futureCol)) == 1 and self.board[futureCol][futureRow] == 0 and \
-                        VALIDPOS[pos_bee]:
-                    for i in VALIDPOS[pos_bee]:
-                        if i == (futureRow, futureCol):
-                            moves[(futureRow, futureCol)] = []
-                elif self._distancia(pos_bee, (futureRow, futureCol)) == 1 and type(self.board[futureCol][futureRow])\
-                        != int and VALIDPOS[pos_bee]:
-                    other_bee = self.board[futureCol][futureRow]
-                    if other_bee.owner != bee.owner:
+        posBee = (bee.row, bee.col)
+        for futureCol in range (0, COLS):
+            for futureRow in range (0, len(ROWS)):
+                if self._distancia(posBee, (futureRow, futureCol)) == 1 and self.board[futureCol][futureRow]==0 and VALIDPOS[posBee]:
+                    for i in VALIDPOS[posBee]:
+                            if i == (futureRow, futureCol):
+                                moves[(futureRow, futureCol)]=[]
+                elif self._distancia(posBee, (futureRow, futureCol)) == 1 and type(self.board[futureCol][futureRow])!=int  and VALIDPOS[posBee]:
+                    otherBee = self.board[futureCol][futureRow]
+                    if otherBee.owner != bee.owner:
                         weakness = tipos[bee.color]
-                        if other_bee.color == weakness:
-                            for i in VALIDPOS[pos_bee]:
+                        if otherBee.color == weakness:
+                            for i in VALIDPOS[posBee]:
                                 if i == (futureRow, futureCol):
-                                    moves[(futureRow, futureCol)] = [other_bee]
+                                    moves[(futureRow, futureCol)] = [otherBee]
         return moves
     
-    @staticmethod
-    def _distancia(a, b):
+    def _distancia(self, a, b):
         return max(abs(a[0]-b[0]), abs(a[1]-b[1]))
     
     def remove(self, pieces):
@@ -171,16 +153,15 @@ class Board:
     def winner(self):
         if self.player1bees + self.player2bees <= 10:
             bees = self.get_all_bees("P1")+self.get_all_bees("P2")
-            color_count = 0
-            color = None
+            colorCount = 0
             for i in range(len(bees)):
                 if i == 0:
                     color = bees[i].color
-                    color_count += 1
+                    colorCount += 1
                 else:
                     if color == bees[i].color:
-                        color_count += 1
-            if color_count == len(bees):
+                        colorCount += 1
+            if colorCount == len(bees):
                 return "Empate"
         if self.player1bees <= 0:
             return "Gana el jugador 2"
